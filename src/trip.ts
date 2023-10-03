@@ -10,6 +10,13 @@ import { User } from "./user";
 
 export const newDepature = (user: User, station: STATIONS, type: TRANSPORT) => {
   if (type === TRANSPORT.TUBE) {
+    // We need to check if the user has enough funds to start a new trip
+    if (user.card.balance < MAX_FARE) {
+      console.log(
+        `${user.name} does not have enough funds to start a new trip.`
+      );
+      return null;
+    }
     // If the user is starting a new trip, we need to deduct the max fare
     user.card.balance -= MAX_FARE;
     user.card.lastDeparture = station;
@@ -17,6 +24,13 @@ export const newDepature = (user: User, station: STATIONS, type: TRANSPORT) => {
       `${user.name} has a new tube trip departure at ${station} station`
     );
   } else if (type === TRANSPORT.BUS) {
+    // We need to check if the user has enough funds to start a new trip
+    if (user.card.balance < FARES.bus) {
+      console.log(
+        `${user.name} does not have enough funds to start a new trip.`
+      );
+      return null;
+    }
     // If the user is on a bus, we charge a flat rate
     user.card.balance -= FARES.bus;
     console.log(
